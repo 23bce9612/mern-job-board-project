@@ -33,9 +33,11 @@ function JobList() {
       status: "pending",
     };
 
+    // Save to global list
     const prev = JSON.parse(localStorage.getItem("pendingApplications")) || [];
     localStorage.setItem("pendingApplications", JSON.stringify([...prev, newApplication]));
 
+    // Save to user-specific applied jobs
     const updatedApplied = [...appliedJobs, job._id];
     setAppliedJobs(updatedApplied);
     localStorage.setItem(`appliedJobs-${user.email}`, JSON.stringify(updatedApplied));

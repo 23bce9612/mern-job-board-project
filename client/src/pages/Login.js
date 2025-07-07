@@ -5,11 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  });
-
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -32,23 +28,24 @@ function Login() {
       localStorage.setItem("user", JSON.stringify({ ...user, token }));
 
       if (user.role === "jobseeker") {
-        const profile = localStorage.getItem(`jobseekerProfile-${user.email}`);
-        navigate(profile ? "/jobs" : "/jobs");
+        navigate("/jobs");
       } else if (user.role === "employer") {
         navigate("/home-employer");
+      } else {
+        setError("Unknown user role.");
       }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.msg || "Login failed");
+      setError(err.response?.data?.msg || "Login failed. Please try again.");
     }
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f0f8ff" }}>
-      <div style={{ maxWidth: "400px", width: "100%", background: "#fff", padding: "30px", borderRadius: "10px", boxShadow: "0 0 15px rgba(0,0,0,0.1)" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#007bff" }}>Welcome to Job Board</h2>
+    <div style={containerStyle}>
+      <div style={cardStyle}>
+        <h2 style={titleStyle}>Welcome to Job Board</h2>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+        <form onSubmit={handleSubmit} style={formStyle}>
           <div>
             <label>Email:</label>
             <input
@@ -73,27 +70,49 @@ function Login() {
             />
           </div>
 
-          <button type="submit" style={buttonStyle}>
-            Login
-          </button>
+          <button type="submit" style={buttonStyle}>Login</button>
 
-          {error && (
-            <p style={{ color: "red", marginTop: "10px", textAlign: "center" }}>
-              {error}
-            </p>
-          )}
+          {error && <p style={errorStyle}>{error}</p>}
         </form>
 
-        <p style={{ textAlign: "center", marginTop: "20px" }}>
+        <p style={footerStyle}>
           Don’t have an account?{" "}
-          <Link to="/register" style={{ color: "#007bff", fontWeight: "bold", textDecoration: "underline" }}>
-            Register here
-          </Link>
+          <Link to="/register" style={linkStyle}>Register here</Link>
         </p>
       </div>
     </div>
   );
 }
+
+// 🔧 Styles
+const containerStyle = {
+  minHeight: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "#f0f8ff"
+};
+
+const cardStyle = {
+  maxWidth: "400px",
+  width: "100%",
+  background: "#fff",
+  padding: "30px",
+  borderRadius: "10px",
+  boxShadow: "0 0 15px rgba(0,0,0,0.1)"
+};
+
+const titleStyle = {
+  textAlign: "center",
+  marginBottom: "20px",
+  color: "#007bff"
+};
+
+const formStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "15px"
+};
 
 const inputStyle = {
   width: "100%",
@@ -111,6 +130,23 @@ const buttonStyle = {
   borderRadius: "5px",
   cursor: "pointer",
   fontWeight: "bold"
+};
+
+const errorStyle = {
+  color: "red",
+  marginTop: "10px",
+  textAlign: "center"
+};
+
+const footerStyle = {
+  textAlign: "center",
+  marginTop: "20px"
+};
+
+const linkStyle = {
+  color: "#007bff",
+  fontWeight: "bold",
+  textDecoration: "underline"
 };
 
 export default Login;
