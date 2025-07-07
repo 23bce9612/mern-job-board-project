@@ -1,7 +1,13 @@
 import React from "react";
 
 function Home() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  let user = null;
+
+  try {
+    user = JSON.parse(localStorage.getItem("user"));
+  } catch (e) {
+    user = null; // fallback if parsing fails
+  }
 
   return (
     <div style={{

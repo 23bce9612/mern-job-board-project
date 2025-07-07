@@ -26,16 +26,16 @@ function Login() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", form);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, form);
       const { token, user } = res.data;
 
       localStorage.setItem("user", JSON.stringify({ ...user, token }));
 
       if (user.role === "jobseeker") {
         const profile = localStorage.getItem(`jobseekerProfile-${user.email}`);
-        navigate(profile ? "/jobs" : "/jobs"); // you may adjust this
+        navigate(profile ? "/jobs" : "/jobs");
       } else if (user.role === "employer") {
-        navigate("/home-employer"); // ✅ FIXED ROUTE
+        navigate("/home-employer");
       }
     } catch (err) {
       console.error(err);

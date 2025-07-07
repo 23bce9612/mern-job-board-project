@@ -26,7 +26,7 @@ function Register() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/users/register", form);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/users/register`, form);
       alert("✅ Registration successful. Please login.");
       navigate("/login");
     } catch (err) {
