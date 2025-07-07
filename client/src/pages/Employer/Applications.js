@@ -22,8 +22,8 @@ function Applications() {
         ? `🎉 Congratulations! You've been selected for the role of ${updated[index].jobTitle} at ${updated[index].company}.`
         : `❌ Thank you for applying to ${updated[index].jobTitle} at ${updated[index].company}. Unfortunately, you were not selected.`;
 
+    // Update localStorage (mock DB)
     const allApps = JSON.parse(localStorage.getItem("pendingApplications")) || [];
-
     const newAll = allApps.map((app) =>
       app.jobId === updated[index].jobId && app.userEmail === updated[index].userEmail
         ? updated[index]
@@ -31,11 +31,13 @@ function Applications() {
     );
 
     localStorage.setItem("pendingApplications", JSON.stringify(newAll));
-    setApplications(
-      newAll.filter((app) =>
-        JSON.parse(localStorage.getItem("employerJobs")).map((job) => job._id).includes(app.jobId)
-      )
-    );
+
+    // Update filtered employer applications again
+    const employerJobs = JSON.parse(localStorage.getItem("employerJobs")) || [];
+    const jobIds = employerJobs.map((job) => job._id);
+    const filtered = newAll.filter((app) => jobIds.includes(app.jobId));
+
+    setApplications(filtered);
   };
 
   return (
@@ -58,7 +60,9 @@ function Applications() {
               background: "#f9f9f9",
             }}
           >
-            <h4>{app.applicantName} applied for <strong>{app.jobTitle}</strong></h4>
+            <h4>
+              {app.applicantName} applied for <strong>{app.jobTitle}</strong>
+            </h4>
             <p>
               <strong>Status:</strong>{" "}
               <span
@@ -79,28 +83,13 @@ function Applications() {
               <div>
                 <button
                   onClick={() => handleDecision(index, "accepted")}
-                  style={{
-                    backgroundColor: "green",
-                    color: "white",
-                    padding: "8px 16px",
-                    marginRight: "10px",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
+                  style={acceptButtonStyle}
                 >
                   Accept
                 </button>
                 <button
                   onClick={() => handleDecision(index, "rejected")}
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
-                    padding: "8px 16px",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
+                  style={rejectButtonStyle}
                 >
                   Reject
                 </button>
@@ -117,5 +106,24 @@ function Applications() {
     </div>
   );
 }
+
+const acceptButtonStyle = {
+  backgroundColor: "green",
+  color: "white",
+  padding: "8px 16px",
+  marginRight: "10px",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+};
+
+const rejectButtonStyle = {
+  backgroundColor: "red",
+  color: "white",
+  padding: "8px 16px",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+};
 
 export default Applications;

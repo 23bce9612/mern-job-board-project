@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// Replace this with your actual Render backend URL or use Vercel env var
+const API_BASE = process.env.REACT_APP_API_URL || "https://mern-job-board-project.onrender.com";
+
 function Dashboard() {
   const [jobs, setJobs] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -8,9 +11,8 @@ function Dashboard() {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/jobs");
+      const res = await axios.get(`${API_BASE}/api/jobs`);
 
-      // ✅ Match jobs where postedBy.name == logged-in employer name
       const postedByMe = res.data.filter(
         job => job.postedBy?.name === user?.name
       );
@@ -18,7 +20,7 @@ function Dashboard() {
       setJobs(postedByMe);
     } catch (err) {
       console.error(err);
-      alert("Failed to load jobs.");
+      alert("❌ Failed to load jobs.");
     }
   };
 
@@ -30,7 +32,7 @@ function Dashboard() {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/jobs/${id}`, {
+      await axios.delete(`${API_BASE}/api/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("✅ Job deleted");
@@ -63,14 +65,7 @@ function Dashboard() {
             <h4>{job.title} at {job.company}</h4>
             <p><strong>Location:</strong> {job.location}</p>
             <p>{job.description}</p>
-            <button onClick={() => deleteJob(job._id)} style={{
-              background: "#dc3545",
-              color: "#fff",
-              padding: "8px 12px",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer"
-            }}>
+            <button onClick={() => deleteJob(job._id)} style={deleteButtonStyle}>
               🗑️ Delete
             </button>
           </div>
@@ -79,5 +74,14 @@ function Dashboard() {
     </div>
   );
 }
+
+const deleteButtonStyle = {
+  background: "#dc3545",
+  color: "#fff",
+  padding: "8px 12px",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer"
+};
 
 export default Dashboard;

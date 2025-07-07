@@ -28,7 +28,7 @@ function PostJob() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/jobs",
+        `${process.env.REACT_APP_API_URL}/api/jobs`,
         form,
         {
           headers: {
@@ -51,15 +51,18 @@ function PostJob() {
         📝 Post a New Job
       </h2>
 
-      <form onSubmit={handleSubmit} style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
-        background: "#fff",
-        padding: "30px",
-        borderRadius: "10px",
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-      }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+          background: "#fff",
+          padding: "30px",
+          borderRadius: "10px",
+          boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+        }}
+      >
         <label>Job Title:</label>
         <input type="text" name="title" value={form.title} onChange={handleChange} required />
 
@@ -70,12 +73,26 @@ function PostJob() {
         <input type="text" name="location" value={form.location} onChange={handleChange} required />
 
         <label>Description:</label>
-        <textarea name="description" value={form.description} onChange={handleChange} rows="4" required></textarea>
+        <textarea
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          rows="4"
+          required
+        ></textarea>
 
-        <button type="submit" style={{
-          background: "#007bff", color: "#fff", padding: "10px", border: "none",
-          borderRadius: "5px", cursor: "pointer", fontWeight: "bold"
-        }}>
+        <button
+          type="submit"
+          style={{
+            background: "#007bff",
+            color: "#fff",
+            padding: "10px",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
           Post Job
         </button>
       </form>

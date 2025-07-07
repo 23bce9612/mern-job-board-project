@@ -16,15 +16,16 @@ function AppliedJobs() {
 
   if (!user) {
     return (
-      <p style={{ padding: "30px", textAlign: "center", color: "red" }}>
+      <div style={{ padding: "30px", textAlign: "center", color: "red" }}>
         ❌ You must be logged in to view applications.
-      </p>
+      </div>
     );
   }
 
   return (
     <div style={{ padding: "30px" }}>
-      <h2>📦 My Applications</h2>
+      <h2 style={{ color: "#007bff", marginBottom: "20px" }}>📦 My Applications</h2>
+
       {appliedJobs.length === 0 ? (
         <p>No jobs applied yet.</p>
       ) : (
